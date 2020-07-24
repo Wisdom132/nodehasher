@@ -1,60 +1,59 @@
 'use strict';
-var crypto = require('crypto');
-let salt;
-let passwordData;
-/**
- * generates random string of characters i.e salt
- * @function
- * @param {number} length - Length of the random string.
- */
-var genRandomString = function (length) {
-    return crypto.randomBytes(Math.ceil(length / 2))
-        .toString('hex') /** convert to hexadecimal format */
-        .slice(0, length); /** return required number of characters */
+let crypto = require('crypto');
+// logger
+let logger = (func) => {
+    console.log(func);
+};
+exports.generateSalt = (rounds) => {
+    if (rounds >= 15) {
+        throw new Error(`${rounds} is greater than 15,Must be less that 15`);
+    }
+    if (typeof rounds !== 'number') {
+        throw new Error('rounds param must be a number');
+    }
+    if (rounds == null) {
+        rounds = 12;
+    }
+
+    return crypto.randomBytes(Math.ceil(rounds / 2)).toString('hex').slice(0, rounds);
 };
 
-/**
- * hash password with sha512.
- * @function
- * @param {string} password - List of required fields.
- * @param {string} salt - Data to be validated.
- */
-var sha512 = function (password, salt) {
-    var hash = crypto.createHmac('sha512', salt); /** Hashing algorithm sha512 */
+// hasher function
+let hasher = (password, salt) => {
+    let hash = crypto.createHmac('sha512', salt);
     hash.update(password);
-    var value = hash.digest('hex');
+    let value = hash.digest('hex');
     return {
         salt: salt,
-        passwordHash: value
+        hashedpassword: value
     };
 };
 
+//method to return hash and salt
+exports.hash = (password, salt) => {
+    if (password == null || salt == null) {
+        throw new Error('Must Provide Password and salt values');
+    }
+    if (typeof password !== 'string' || typeof salt !== 'string') {
+        throw new Error('password must be a string and salt must either be a salt string or a number of rounds');
+    }
+    return hasher(password, salt);
+};
 
-function validate(userpassword) {
-    const saltFromDb = getFromDB();
-    const hashedPassFromDB = getFromDB();
-
-    var passwordData = sha512(userpassword, saltFromDb);
-    if (passwordData.passwordHash === hashedPassFromDB) {
+exports.compare = (password, hash) => {
+    hash = {
+        salt: '8c1a1c8575',
+        hashedpassword: '3f5b726ab32c8892a51d99db936ea4e8f1601cd0966cf1df5e1563a7aeb413c7597b06fdf71b3bbb3a44f427feaa87db1e66c0c5e6afd789c9a0016bb0aadad1'
+    }
+    if (password == null || hash == null) {
+        throw new Error('password and hash is required to compare');
+    }
+    if (typeof password !== 'string' || typeof hash !== 'object') {
+        throw new Error('password must be a String and hash must be an Object');
+    }
+    let passwordData = hasher(password, hash.salt);
+    if (passwordData.hashedpassword === hash.hashedpassword) {
         return true;
     }
-    return false;
-}
-
-
-function saltHashPassword(userpassword) {
-    salt = genRandomString(16); /** Gives us salt of length 16 */
-    passwordData = sha512(userpassword, salt);
-    console.log({
-        password: userpassword
-    });
-    console.log({
-        hash: passwordData.passwordHash
-    });
-    console.log({
-        salt: passwordData.salt
-    });
-}
-
-saltHashPassword('MYPASSWORD');
-console.log(validate('MYPASSWORD'));
+    return false
+};

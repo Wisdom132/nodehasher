@@ -1,4 +1,4 @@
-const hasher = require('./hasher');
+const hasher = require('./index');
 let salt = hasher.generateSalt(10);
 let test = hasher.hash('wisdom', salt);
 console.log(test)
