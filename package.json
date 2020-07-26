@@ -4,25 +4,17 @@
   "description": "hasher for nodejs",
   "main": "hasher.js",
   "dependencies": {
-    "node-pre-gyp": "^0.15.0"
+    "node-pre-gyp": "^0.15.0",
+    "nodemon": "^2.0.4"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "nodemon test"
   },
   "keywords": [
     "crypto",
     "hasher"
   ],
   "author": "wisdom ekpot <wisdomekpot@gmail.com>",
-  "license": "ISC",
-  "binary": {
-    "module_name": "hasher",
-    "module_path": "",
-    "host": "https://your_bucket.s3-us-west-1.amazonaws.com",
-    "napi_versions": [
-      1,
-      3
-    ]
-  }
+  "license": "ISC"
 }

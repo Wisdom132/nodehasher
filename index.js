@@ -1,7 +1,7 @@
 'use strict';
 let crypto = require('crypto');
 // logger
-let logger = (func) => {
+let logger = func => {
     console.log(func);
 };
 exports.generateSalt = (rounds) => {
