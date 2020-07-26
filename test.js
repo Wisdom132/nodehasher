@@ -1,9 +1,15 @@
-const hasher = require('./index');
-let salt = hasher.generateSalt(10);
-let test = hasher.hash('wisdom', salt);
+const {
+    generateSalt,
+    hash,
+    compare
+} = require('./index');
+
+let salt = generateSalt(10);
+
+let test = hash('wisdom', salt);
 console.log(test)
 
-let compare = hasher.compare('wisdom');
+let comparepasword = compare('wisdom');
 console.log({
-    compare: compare
+    comparepasword: comparepasword
 })
