@@ -41,10 +41,10 @@ let hash = (password, salt) => {
 };
 
 let compare = (password, hash) => {
-    hash = {
-        salt: 'f844b09ff50c',
-        hashedpassword: '2d2528d4534394d1e2702f53826d11c16ed4422f6bd466745cb4f1aa0e042b52b98fc5e65b86d73a6ce4807679b773fb955c4824b0471015354e1a872d42cb62'
-    }
+    // hash = {
+    //     salt: 'f844b09ff50c',
+    //     hashedpassword: '2d2528d4534394d1e2702f53826d11c16ed4422f6bd466745cb4f1aa0e042b52b98fc5e65b86d73a6ce4807679b773fb955c4824b0471015354e1a872d42cb62'
+    // }
     if (password == null || hash == null) {
         throw new Error('password and hash is required to compare');
     }
